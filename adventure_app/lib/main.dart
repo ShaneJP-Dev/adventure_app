@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -487,67 +488,127 @@ class DiscoverPage extends StatelessWidget {
 }
 
 class ProfilePage extends StatelessWidget {
+  const ProfilePage({Key? key}) : super(key: key);
+//dont want t see this again 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile'),
+        elevation: 0,
         backgroundColor: Colors.transparent,
+        foregroundColor: Colors.black,
+        title: const Text("ADVENTURE_PROFILE"),
+        centerTitle: true,
+        actions: [
+         
+        ],
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+      body: ListView(
+        padding: const EdgeInsets.all(10),
+        children: [
+          // COLUMN THAT WILL CONTAIN THE PROFILE
+          Column(
+            children: const [
               CircleAvatar(
                 radius: 50,
-                backgroundImage: AssetImage('assets/profile_image.webp'),
-              ),
-              SizedBox(height: 20),
-              Text(
-                'User',
-                style: TextStyle(fontSize: 24),
+                backgroundImage:NetworkImage(
+                  "https://www.pexels.com/photo/man-in-black-jacket-771742/",
+                ),
               ),
               SizedBox(height: 10),
               Text(
-                'Member Since: January 2020',
-                style: TextStyle(fontSize: 16),
+                "USER_NAME",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  // Add edit profile functionality here
-                },
-                child: Text('Edit Profile'),
-              ),
-              SizedBox(height: 10),
-              ElevatedButton(
-                onPressed: () {
-                  // Add view account details functionality here
-                },
-                child: Text('View Account Details'),
-              ),
-              SizedBox(height: 10),
-              ElevatedButton(
-                onPressed: () {
-                  // Add manage settings functionality here
-                },
-                child: Text('Settings'),
-              ),
-              SizedBox(height: 10),
-              ElevatedButton(
-                onPressed: () {
-                  // Add logout functionality here
-                },
-                child: Text('Logout'),
-              ),
+              Text("POTENTAL_TITLE_")
             ],
           ),
-        ),
+       
+         
+          const SizedBox(height: 10),
+          SizedBox(
+            height: 180,
+            child: ListView.separated(
+              physics: const BouncingScrollPhysics(),
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                final card = profileCompletionCards[index];
+                return SizedBox(
+                  width: 160,
+                  child: Card(
+                    shadowColor: Colors.black12,
+                    child: Padding(
+                      padding: const EdgeInsets.all(15),
+                      child: Column(
+                        children: [
+                          Icon(
+                            card.icon,
+                            size: 30,
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            card.title,
+                            textAlign: TextAlign.center,
+                          ),
+                          const Spacer(),
+                          ElevatedButton(
+                            onPressed: () {},
+                            style: ElevatedButton.styleFrom(
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                            ),
+                            child: Text(card.buttonText),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+              separatorBuilder: (context, index) =>
+                  const Padding(padding: EdgeInsets.only(right: 5)),
+              itemCount: profileCompletionCards.length,
+            ),
+          ),
+          const SizedBox(height: 35),
+          ...List.generate(
+            customListTiles.length,
+            (index) {
+              final tile = customListTiles[index];
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 5),
+                child: Card(
+                  elevation: 4,
+                  shadowColor: Colors.black12,
+                  child: ListTile(
+                    leading: Icon(tile.icon),
+                    title: Text(tile.title),
+                    trailing: const Icon(Icons.chevron_right),
+                  ),
+                ),
+              );
+            },
+          )
+        ],
       ),
+      
     );
   }
+}
+
+class ProfileCompletionCard {
+  final String title;
+  final String buttonText;
+  final IconData icon;
+  ProfileCompletionCard({
+    required this.title,
+    required this.buttonText,
+    required this.icon,
+  });
 }
 
 class DiscoveryDetailPage extends StatelessWidget {
@@ -587,3 +648,49 @@ class ActivityDetailPage extends StatelessWidget {
     );
   }
 }
+
+List<ProfileCompletionCard> profileCompletionCards = [
+  ProfileCompletionCard(
+    title: "Set Your Profile Details",
+    icon: CupertinoIcons.person_circle,
+    buttonText: "Continue",
+  ),
+  ProfileCompletionCard(
+    title: "View Leaderboads",
+    icon: CupertinoIcons.chart_bar,
+    buttonText: "View",
+  ),
+  ProfileCompletionCard(
+    title: "Add Some Friends",
+    icon: CupertinoIcons.square_list,
+    buttonText: "Add",
+  ),
+];
+
+class CustomListTile {
+  final IconData icon;
+  final String title;
+  CustomListTile({
+    required this.icon,
+    required this.title,
+  });
+}
+
+List<CustomListTile> customListTiles = [
+  CustomListTile(
+    icon: Icons.insights,
+    title: "Past Activity",
+  ),
+  CustomListTile(
+    icon: Icons.location_on_outlined,
+    title: "Location",
+  ),
+  CustomListTile(
+    title: "Notifications",
+    icon: CupertinoIcons.bell,
+  ),
+  CustomListTile(
+    title: "Logout",
+    icon: CupertinoIcons.arrow_right_arrow_left,
+  ),
+];
